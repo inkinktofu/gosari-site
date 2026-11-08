@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import cover from '../assets/characters/cover.jpg';
+import contents from '../assets/characters/contents.jpg';
+import about from '../assets/characters/about.jpg';
+import spare from '../assets/characters/spare.jpg';
+import sheet1 from '../assets/characters/sheet1.jpg';
+import sheet2 from '../assets/characters/sheet2.jpg';
+// 이미지 교체: src/assets/characters/ 안의 같은 이름 파일만 바꾸면 됩니다.
+const imgs = { cover, contents, about, spare, sheet1, sheet2 };
+const alts = {
+  cover: '고사리 잎을 머리에 얹은 소녀의 얼굴 클로즈업',
+  contents: '고사리 잎 사이로 보이는 소녀의 반짝이는 눈',
+  about: '고사리 그늘 아래 소녀의 얼굴',
+  spare: '고사리 잎에 둘러싸인 소녀',
+  sheet1: '고사리 머리 소녀의 캐릭터 설정화',
+  sheet2: '고사리 머리 소녀의 여러 표정과 전신',
+};
+const { name = 'cover', width = 480, alt, class: cls = '' } = Astro.props;
+---
+<Image src={imgs[name]} alt={alt ?? alts[name]} width={width} class:list={['fern', cls]} />

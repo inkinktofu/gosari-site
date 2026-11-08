@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Fern from '../components/Fern.astro';
+import { getEssays, fmt } from '../lib/essays';
+const essays = (await getEssays()).reverse();
+---
+<Layout title="목차" description="임시인간 고사리의 에세이 목차">
+  <main id="main" class="spread">
+    <section class="leaf left halftone-soft">
+      <h1 class="misreg">목차</h1>
+      <ol class="toc">
+        {essays.map((e) => (
+          <li><a href={`/essays/${e.id}/`}>
+            <span class="t">{e.data.title}</span>
+            <span class="m">{e.data.category} · <time datetime={e.data.date.toISOString()}>{fmt(e.data.date)}</time></span>
+          </a></li>
+        ))}
+      </ol>
+      {essays.length === 0 && <p>아직 실린 글이 없습니다.</p>}
+    </section>
+    <section class="leaf right">
+      <Fern name="contents" width={560} />
+      <div class="letterbox" role="note">
+        <h2>편지함</h2>
+        <p>이곳에 편지를 넣을 수 있게 될 거예요. 지금은 우체통만 놓여 있습니다.</p>
+        <textarea disabled aria-label="편지함 (준비 중)" placeholder="준비 중입니다"></textarea>
+      </div>
+      <a class="more" href="/about/">작가 소개 보기</a>
+    </section>
+  </main>
+</Layout>

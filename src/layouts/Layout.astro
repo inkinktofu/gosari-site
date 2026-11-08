@@ -1,0 +1,24 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+const { title, description = site.description, bare = false } = Astro.props;
+const full = title === site.title ? title : `${title} | ${site.title}`;
+const url = new URL(Astro.url.pathname, Astro.site);
+---
+<html lang="ko">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{full}</title><meta name="description" content={description} />
+  <link rel="canonical" href={url} /><link rel="icon" href="/favicon.svg" />
+  <meta property="og:title" content={full} /><meta property="og:description" content={description} />
+  <meta property="og:type" content="website" /><meta property="og:url" content={url} /><meta property="og:locale" content="ko_KR" />
+  <meta name="theme-color" content="#2f4a2a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  {!bare && <header class="topbar"><a href="/">표지</a><a href="/contents/">목차</a><a href="/about/">작가 소개</a></header>}
+  <slot />
+</body>
+</html>

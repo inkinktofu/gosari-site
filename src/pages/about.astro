@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Fern from '../components/Fern.astro';
+import { site } from '../data/site';
+---
+<Layout title="작가 소개" description={`${site.title} 작가 소개`}>
+  <main id="main" class="spread">
+    <section class="leaf left"><Fern name="about" width={640} /></section>
+    <section class="leaf right">
+      <h1 class="misreg">작가 소개</h1>
+      {site.bio.map((p) => <p>{p}</p>)}
+      <p><a class="more" href={site.instagram} rel="noopener" target="_blank">인스타그램 {site.handle}</a></p>
+    </section>
+  </main>
+</Layout>

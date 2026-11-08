@@ -1,0 +1,41 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Fern from '../../components/Fern.astro';
+import { getEssays, fmt } from '../../lib/essays';
+export async function getStaticPaths() {
+  const essays = await getEssays();
+  return essays.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, idx: i, prev: essays[i - 1], next: essays[i + 1] } }));
+}
+const { entry, idx, prev, next } = Astro.props;
+const pick = ["contents", "about", "spare"][idx % 3];
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<Layout title={d.title} description={d.summary}>
+  <main id="main" class="reader" data-mode="scroll">
+    <div class="controls">
+      <button id="mode" type="button" aria-pressed="false">책장 넘기기로 보기</button>
+      <button id="pprev" type="button" hidden>이전 쪽</button>
+      <span id="count" aria-live="polite"></span>
+      <button id="pnext" type="button" hidden>다음 쪽</button>
+    </div>
+    <div id="stage" aria-hidden="true"></div>
+    <article id="source" class="prose">
+      <header class="essay-head">
+        <p class="cat">{d.category}</p>
+        <h1 class="misreg">{d.title}</h1>
+        <p><time datetime={d.date.toISOString()}>{fmt(d.date)}</time></p>
+        {d.cover ? <Image src={d.cover} alt={d.coverAlt} width={480} /> : <Fern name={pick} width={480} />}
+      </header>
+      <Content />
+      <nav class="essay-nav" aria-label="글 이동">
+        {prev ? <a rel="prev" href={`/essays/${prev.id}/`}>이전 글 · {prev.data.title}</a> : <span />}
+        <a href="/contents/">목차로</a>
+        {next ? <a rel="next" href={`/essays/${next.id}/`}>다음 글 · {next.data.title}</a> : <span />}
+      </nav>
+    </article>
+  </main>
+  <script>import '../../scripts/reader.js';</script>
+</Layout>

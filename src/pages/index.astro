@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Fern from '../components/Fern.astro';
+import { site } from '../data/site';
+---
+<Layout title={site.title} bare>
+  <main id="main" class="stage">
+    <div class="book">
+      <div class="inside" aria-hidden="true"><Fern name="sheet1" width={720} alt="" /></div>
+      <a id="cover" class="cover halftone" href="/contents/" aria-label="책을 펼쳐 목차로 가기">
+        <span class="frame">
+          <span class="issue">제1집 · 임시호</span>
+          <Fern name="cover" width={600} />
+          <span class="plate misreg">{site.title}</span>
+          <span class="sub">{site.tagline}</span>
+        </span>
+        <span class="hint">표지를 눌러 펼치기</span>
+      </a>
+    </div>
+  </main>
+  <script>
+    const c = document.getElementById('cover') as HTMLAnchorElement;
+    c.addEventListener('click', (e) => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      e.preventDefault();
+      document.querySelector('.book')!.classList.add('open');
+      setTimeout(() => (location.href = c.href), 1000);
+    });
+  </script>
+</Layout>
